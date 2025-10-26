@@ -35,3 +35,24 @@ filter.addEventListener('change', function () {
 
 })
 
+
+const filterExperience = document.querySelector("#filter-experience-level")
+
+filterExperience.addEventListener("change", function(){
+
+ const jobs = document.querySelectorAll('.job-listing-card') //Selecciona todos los trabajos una vez estan cargados en la pagina
+ const selectedValue = filterExperience.value 
+
+//Recorremos los trabajos para mostrar solo los que coincidan
+jobs.forEach(job => {
+
+  const nivel = job.getAttribute("data-nivel")
+
+  const isShown = selectedValue === '' || selectedValue === nivel
+
+  job.classList.toggle('is-hidden', !isShown)
+  
+})
+
+
+})

@@ -45,7 +45,8 @@ function renderJobs(jobsToRender) {
     container.appendChild(article); //Añadimos el articulo al contenedor
   });
 
-  resultsInfo.textContent = `Mostrando ${jobsToRender.length} de ${allJobs.length} ofertas`;
+   resultsInfo.textContent = `Mostrando ${jobsToRender.length} de ${allJobs.length} ofertas`;
+
 }
 
 //Activamos el buscador una vez cargadas las ofertas
@@ -61,6 +62,7 @@ searchFilter.addEventListener("input", function () {
   console.log(filteredJobs);
 
   renderJobs(filteredJobs); //Re-renderizamos solo los trabajos que coincidan con el buscador
+ 
 });
 
 //console.log("Después del fetch")
