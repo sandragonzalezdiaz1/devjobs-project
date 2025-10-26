@@ -398,6 +398,7 @@ article {
     align-items: start;
     gap: 1rem;
 
+    /* Para no mostrar el articulo en los resultados de busqueda */
     &.is-hidden {
       display: none;
     }
@@ -453,8 +454,51 @@ article {
 .button-apply-job {
   background: #09f;
 
+  /* Estilos del botón cuando ya ha sido pulsado */
   &.is-applied {
     background: #4caf50;
-    pointer-events: none;
+    pointer-events: none; /* Desactiva los eventos del ratón para el botón aplicado */
   }
 }
+
+
+/* Estilos del select para filtrar los empleos */
+select {
+  padding: 0.625rem 1.25rem;
+  background-color: #242d3a;
+  border:0;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: #ddd;
+  cursor: pointer;
+  transition: all 0.2s;
+  appearance: none; /* Elimina el estilo por defecto del select */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stronke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9' /%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center; 
+  padding-right: 2.5rem;
+  /* Posicionamos el icono en la derecha del elemento select y centrado verticalmente */
+
+  /* Pseudo-clase que significa que el ratón está encima */
+  &:hover {
+    background-color: var(--primary-hover);
+    color: white;
+  }
+
+  /* Pseudo-clase que significa que el elemento tiene el foco */
+  &:focus {
+    outline: 2px solid #1173d4;
+    outline-offset: 2px;
+  }
+
+}
+
+h2 {
+  text-align: center;
+}
+
+
+/* Estilos para la pagina detalle-oferta.html */
+
+
+

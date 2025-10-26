@@ -17,8 +17,11 @@ filter.addEventListener('change', function () {
     //const modalidad = job.dataset.modalidad
     const modalidad = job.getAttribute('data-modalidad')
 
+    //Cuando tenemos que mostrar el articulo
     const isShown = selectedValue === '' || selectedValue === modalidad
+
     job.classList.toggle('is-hidden', !isShown) //Si isShown es false, añade la clase is-hidden, si es true, la quita (Con esto nos quitamos el if/else)
+
 
     /* if(selectedValue === '' || selectedValue === modalidad){
       //job.style.display = 'flex' //valor original

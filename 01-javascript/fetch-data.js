@@ -2,14 +2,14 @@
 const container = document.querySelector('.jobs-listings')
 
 //Prueba de asincronía con fetch
-console.log("Antes del fetch")
+//console.log("Antes del fetch")
 //Peticion fetch para obtener los trabajos desde un archivo JSON
 fetch("./data.json") /* fetch es asincrono */
   .then((response) => {
   return response.json();
 })
   .then((jobs) => {
-    console.log("Tengo los resultados del fetch")
+    //console.log("Tengo los resultados del fetch")
     console.log(jobs);
     jobs.forEach(job => {
       //Creamos un articulo por cada trabajo
@@ -34,10 +34,7 @@ fetch("./data.json") /* fetch es asincrono */
 
     })
 
-
-
-
 })
 
-console.log("Después del fetch")
+//console.log("Después del fetch")
 
