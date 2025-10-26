@@ -1,7 +1,6 @@
 const filter = document.querySelector('#filter-location')
 const mensaje = document.querySelector('#filter-selected-value')
 
-
 filter.addEventListener('change', function () {
 
   const jobs = document.querySelectorAll('.job-listing-card') //Selecciona todos los trabajos una vez estan cargados en la pagina
@@ -35,3 +34,4 @@ filter.addEventListener('change', function () {
   })
 
 })
+
