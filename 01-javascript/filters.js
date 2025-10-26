@@ -56,3 +56,20 @@ jobs.forEach(job => {
 
 
 })
+
+const filterTechnology = document.querySelector("#filter-technology")
+
+filterTechnology.addEventListener("change",function(){
+
+ const jobs = document.querySelectorAll('.job-listing-card')
+ const selectedValue = filterTechnology.value
+
+ jobs.forEach(job => {
+
+  const isShown = job.getAttribute("data-technology").includes(selectedValue)
+  job.classList.toggle("is-hidden", !isShown)
+
+ })
+
+
+})
