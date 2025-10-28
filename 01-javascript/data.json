@@ -150,7 +150,7 @@
     "ubicacion": "Santiago de Chile",
     "descripcion": "Buscamos un administrador de sistemas con experiencia en Linux, Docker y monitoreo de servidores. Conocimiento en scripting Bash o Python será un plus.",
     "data": {
-      "technology": "mobile",
+      "technology": "python",
       "modalidad": "santiago",
       "nivel": "mid-level"
     }
