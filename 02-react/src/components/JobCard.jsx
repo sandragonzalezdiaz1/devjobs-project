@@ -5,7 +5,7 @@ export function JobCard({ job }) {
   const [isApplied, setIsApplied] = useState(false);
 
   const handleApplyClick = () => {
-    setIsApplied(true);
+    setIsApplied(!isApplied);
   };
 
   const buttonClasses = isApplied
@@ -27,7 +27,7 @@ export function JobCard({ job }) {
         </small>
         <p>{job.descripcion}</p>
       </div>
-      <button className={buttonClasses} onClick={handleApplyClick}>
+      <button className={buttonClasses} onClick={handleApplyClick} disabled={isApplied}>
         {buttonText}
       </button>
     </article>

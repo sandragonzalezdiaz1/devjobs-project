@@ -43,6 +43,17 @@
        } */
 
       function JobCard({ data, titulo, empresa, ubicacion, descripcion }) {
+
+        //Desestructuración
+        const [isApplied, setIsApplied] = React.useState(false)
+
+        const handleClick = () => {
+          setIsApplied(!isApplied)
+        }
+
+        const text = isApplied ? 'Aplicado' : 'Aplicar'
+        const buttonClass = isApplied ? 'is-applied' : ''
+
         return (
           <article className="job-listing-card"
           data-modalidad ={data?.modalidad}
@@ -57,7 +68,7 @@
             </small>
             <p>{descripcion}</p>
             </div>
-            <button className="button-apply-job">Aplicar</button>
+            <button className={`button-apply-job ${buttonClass}`} onClick={handleClick} disabled={isApplied}>{text}</button>
           </article>
         );
       }
@@ -75,8 +86,6 @@
               data={{ modalidad: "remoto", nivel: "junior", technology:"react"}}
             >
             </JobCard>
-
-
 
           </div>
         );

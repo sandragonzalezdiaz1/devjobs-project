@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>DevJobs - Empleos</title>
+    <meta charset="UTF-8" />
+    <meta
+      name="description"
+      content="Listado con empleos y filtros para encontrar el trabajo de tus sueños."
+    />
+
+    <link rel="stylesheet" href="./styles.css">
+    
+    <!-- type="module" espera automáticamente a que el DOM esté listo. Además, activa la posibilidad de usar modulos (importar y exportar) -->
+    <script type="module" src="./main.js"></script>
+
+    <!-- defer descarga en paralelo pero ejecuta después de parsear -->
+    <!-- <script defer src="script.js"></script> -->
+  </head>
+
+  <body>
+    <header>
+      <h1>
+        <svg
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        DevJobs
+      </h1>
+
+      <nav>
+        <a href="index.html">
+        Inicio
+      </a>
+        <a href="">Empleos</a>
+      </nav>
+
+      <div>
+        <!-- <devjobs-avatar service="x" username="kikobeats" size="30"></devjobs-avatar> -->
+        <!-- <devjobs-avatar service="github" username="midudev" size="24"></devjobs-avatar> -->
+        <devjobs-avatar service="google" username="google.com" size="30"></devjobs-avatar>
+        <devjobs-avatar service="google" username="netflix.com" size="24"></devjobs-avatar>
+        
+         <!-- <a href="">Publicar un empleo</a> -->
+        <!-- <a href="">Iniciar sesión</a> -->
+      </div>
+    </header>
+
+    <main>
+      <section class="jobs-search">
+        <h1>Encuentra tu próximo trabajo</h1>
+        <p>Explora miles de oportunidades en el sector tecnológico.</p>
+
+        <form role="search" id="empleos-search-form">
+          <div class="search-bar">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-search"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+              <path d="M21 21l-6 -6" />
+            </svg>
+
+            <input
+              required
+              type="text"
+              placeholder="Buscar trabajos, empresas o habilidades"
+              id="empleos-search-input"
+            />
+          </div>
+
+          <div class="search-filters">
+            <select name="technology" id="filter-technology">
+              <option value="">Tecnología</option>
+              <option value="">Todas las tecnologías</option>
+
+              <optgroup label="Frontend">
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="javascript">JavaScript</option>
+                <option value="react">React</option>
+                <option value="vue">Vue</option>
+              </optgroup>
+
+              <optgroup label="Backend">
+                <option value="node">Node.js</option>
+                <option value="python">Python</option>
+                <option value="php">PHP</option>
+                <option value="java">Java</option>
+              </optgroup>
+
+              <optgroup label="Base de datos">
+                <option value="mysql">MySQL</option>
+                <option value="mongodb">MongoDB</option>
+                <option value="postgresql">PostgreSQL</option>
+              </optgroup>
+            </select>
+
+            <select name="location" id="filter-location">
+              <option value="">Todas las ubicaciones</option>
+
+              <optgroup label="España">
+                <option value="madrid">Madrid</option>
+                <option value="barcelona">Barcelona</option>
+                <option value="valencia">Valencia</option>
+              </optgroup>
+
+              <optgroup label="México">
+                <option value="cdmx">Ciudad de México</option>
+                <option value="monterrey">Monterrey</option>
+                <option value="guadalajara">Guadalajara</option>
+              </optgroup>
+
+              <hr />
+
+              <option value="remoto">🌍 Remoto</option>
+            </select>
+            <select name="experience-level" id="filter-experience-level">
+              <option value="">Todos los niveles</option>
+              <option value="junior">Junior</option>
+              <option value="mid-level">Mid-level</option>
+              <option value="senior">Senior</option>
+              <hr />
+              <option value="intern">Prácticas</option>
+              <option value="freelance">Freelance</option>
+            </select>
+          </div>
+        </form>
+
+        <span id="filter-selected-value"></span>
+      </section>
+
+      <section>
+        <h2>Resultados de búsqueda</h2>
+        <span id="results-info"></span>
+
+        <div class="jobs-listings">
+          <!-- AQUI SE INSERTAN LOS EMPLEOS DINÁMICAMENTE -->
+        </div>
+
+        <nav class="pagination">
+          <!-- Para buscar el simbolo < y > se llama "chevron" -->
+          <a href="#"
+            ><svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M15 6l-6 6l6 6" /></svg></a>
+          <a class="is-active" href="#">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <a href="#">5</a>
+          <a href="#"><svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M9 6l6 6l-6 6" /></svg></a>
+        </nav>
+      </section>
+    </main>
+
+    <footer style="padding-bottom: 2000px">
+      <small>&copy; 2025 DevJobs. Todos los derechos reservados.</small>
+    </footer>
+  </body>
+</html>
