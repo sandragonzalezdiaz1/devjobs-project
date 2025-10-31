@@ -25,6 +25,8 @@ function App() {
   const jobsFilteredByFilters = jobsData.filter(job => {
     return (
       (job.data.technology === filters.technology || filters.technology === '')
+        && (job.data.modalidad === filters.location || filters.location === '' )
+      && (job.data.nivel === filters.experienceLevel || filters.experienceLevel === '')
     )
   })
 

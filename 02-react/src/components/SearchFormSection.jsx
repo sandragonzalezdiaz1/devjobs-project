@@ -99,7 +99,7 @@ export function SearchFormSection({ onSearch, onTextFilter }) {
           <select name={idExperienceLevel} id="filter-experience-level">
             <option value="">Nivel de experiencia</option>
             <option value="junior">Junior</option>
-            <option value="mid">Mid-level</option>
+            <option value="mid-level">Mid-level</option>
             <option value="senior">Senior</option>
             <option value="lead">Lead</option>
           </select>
