@@ -1,42 +1,50 @@
-import { useId } from "react";
+import { useId, useState } from "react"; // Hook que genera id unicos para evitar colisiones de nombres (Ideal para formularios)
 
 export function SearchFormSection({ onSearch, onTextFilter }) {
-
   const idText = useId();
   const idTechnology = useId();
   const idLocation = useId();
   const idExperienceLevel = useId();
+  const idContractType = useId();
 
+  // Estado para saber qué campo está activo
+  const [focusedField, setFocusedField] = useState(null)
+
+  // Cuando enviamos el formulario
   const handleSubmit = (event) => {
-    event.preventDefault();
-    //console.log("Submit del formulario de busqueda");
+    event.preventDefault() 
 
-    // Recuperamos el formulario
-    const formData = new FormData(event.target)
+
+    // Solo obtenemos los datos del input/select que cambió
+    //const formData = new FormData(event.target)
+
+   // Obtenemos todos los datos del formulario
+    const formData = new FormData(event.currentTarget);
 
     // Almacenamos los valores de los select de cada uno de los filtros en un objeto
     const filters = {
       technology: formData.get(idTechnology),
       location: formData.get(idLocation),
-      experienceLevel: formData.get(idExperienceLevel)
-    }
+      experienceLevel: formData.get(idExperienceLevel),
+      contractType: formData.get(idContractType)
+    };
 
     //console.log(filters)
-    onSearch(filters)
-  }
+    onSearch(filters);
+  };
 
-  const handleTextChange = (event) => {
-    const text = event.target.value //Recuperamos el valor del input
-    onTextFilter(text)
-
-  }
+  // Búsqueda de texto en tiempo real
+  const handleChangeText = (event) => {
+    const text = event.target.value; //Recuperamos el valor del input
+    onTextFilter(text);
+  };
 
   return (
     <section className="jobs-search">
       <h1>Encuentra tu próximo trabajo</h1>
       <p>Explora miles de oportunidades en el sector tecnológico.</p>
 
-      <form id="empleos-search-form" role="search" onSubmit={handleSubmit}>
+      <form id="empleos-search-form" role="search" onChange={handleSubmit}>
         <div className="search-bar">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -60,12 +68,15 @@ export function SearchFormSection({ onSearch, onTextFilter }) {
             id="empleos-search-input"
             type="text"
             placeholder="Buscar trabajos, empresas o habilidades"
-            onChange={handleTextChange}
+            onChange={handleChangeText}
+            onFocus={() => setFocusedField('search')}
+            onBlur={() => setFocusedField(null)}
+            style={{
+            borderColor: focusedField === 'search' ? '#4f46e5' : '#d1d5db',
+            outline: focusedField === 'search' ? '2px solid #4f46e5' : 'none',
+          }}
           />
-
-          <button type="submit" className="button-form">
-            Buscar
-          </button>
+      
         </div>
 
         <div className="search-filters">
@@ -102,6 +113,14 @@ export function SearchFormSection({ onSearch, onTextFilter }) {
             <option value="mid-level">Mid-level</option>
             <option value="senior">Senior</option>
             <option value="lead">Lead</option>
+          </select>
+
+          <select name={idContractType} id="filter-contract-type">
+            <option value="">Tipo de contrato</option>
+            <option value="full-time">Full Time</option>
+            <option value="part-time">Part Time</option>
+            <option value="freelance">Freelance</option>
+            <option value="internship">Prácticas</option>
           </select>
         </div>
       </form>

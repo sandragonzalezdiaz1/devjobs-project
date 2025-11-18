@@ -1,13 +1,15 @@
-import styles from "./Pagination.module.css"
+import styles from "./Pagination.module.css" // importamos el CSS Module
 
-// Establecemos valores por defecto en los parametros (por si no pasamos ninguna prop al utilizar el componente)
-export function Pagination({ currentPage = 1, totalPages = 10, onPageChange }) {
+// Valores por defecto en los parametros
+export function Pagination({ currentPage = 1, totalPages = 10, onPageChange = () => {} }) {
 
     //console.log('render Pagination')
 
-  // Generar un array de paginas a mostrar
+  // Genera un array de paginas a mostrar
+  // { length: totalPages } define la longitud del array
+  // (_, i) => i + 1 transforma cada índice en un número de página
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1); // Si en total son 10 paginas generaría [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  //Se utiliza _ como parametro para que no tenga en cuenta ese parametro, no nos interesa darle un valor
+  //Se utiliza _ como parametro para que no tenga en cuenta ese parametro, no interesa darle un valor
 
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === totalPages;
@@ -15,41 +17,40 @@ export function Pagination({ currentPage = 1, totalPages = 10, onPageChange }) {
   const stylePrevButton = isFirstPage
     ? { pointerEvents: "none", opacity: 0.5 }
     : {};
+
   const styleNextButton = isLastPage
     ? { pointerEvents: "none", opacity: 0.5 }
     : {};
 
   const handlePrevClick = (event) => {
     event.preventDefault();
-    if (!isFirstPage) {
-      //Si no estamos en la primera pagina
-      onPageChange(currentPage - 1); //cambiamos a la pagina anterior
+    if (!isFirstPage) { //Si no estamos en la primera pagina
+      onPageChange(currentPage - 1); // Llama a la funcion del padre para cambiar a la pagina anterior
     }
   };
 
   const handleNextClick = (event) => {
     event.preventDefault();
-    if (!isLastPage) {
-      //Si no estamos en la ultima pagina
-      onPageChange(currentPage + 1); //cambiamos a la pagina siguiente
+    if (!isLastPage) { //Si no estamos en la ultima pagina
+      onPageChange(currentPage + 1); // Cambia a la pagina siguiente
     }
   };
 
   const handleChangePage = (event) => {
-    event.preventDefault(); //Evitamos el evento por defecto (la navegacion)
+    event.preventDefault(); //Evita el evento por defecto (la navegacion)
 
-    // Podemos recuperar la page por el atributo data del <a>
+    // Recupera la pagina por el atributo data del <a>
     const page = Number(event.target.dataset.page)
 
     if (page !== currentPage) {
       //Si la pagina es diferente a la pagina actual
-      onPageChange(page); //Cambiamos a esa pagina
+      onPageChange(page); //Cambia a esa pagina
     }
   };
 
   return (
     <nav className={styles.pagination}>
-      {/* Si no es la primera pagina entonces mostramos el svg flecha <  (es lo mismo que poner isFirstPage === false)*/}
+      {/* Si no es la primera pagina entonces muestra el svg flecha <  (es lo mismo que poner isFirstPage === false)*/}
       {!isFirstPage && (
         <a href="#" style={stylePrevButton} onClick={handlePrevClick}>
           <svg
@@ -68,7 +69,7 @@ export function Pagination({ currentPage = 1, totalPages = 10, onPageChange }) {
         </a>
       )}
 
-      {/* Recorremos el array y creamos un <a> por cada pag */}
+      {/* Recorre el array y crea un <a> por cada pagina */}
       {pages.map((page) => (
         <a 
         key={page}
@@ -81,7 +82,7 @@ export function Pagination({ currentPage = 1, totalPages = 10, onPageChange }) {
         </a>
       ))}
 
-      {/* Si no es la ultima pagina mostramos el svg */}
+      {/* Si no es la ultima pagina muestra el svg */}
       {!isLastPage && (
         <a href="#" style={styleNextButton} onClick={handleNextClick}>
           <svg

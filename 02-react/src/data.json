@@ -8,7 +8,8 @@
     "data": {
       "technology": "javascript",
       "modalidad": "remoto",
-      "nivel": "senior"
+      "nivel": "senior",
+      "contractType" : "full-time"
     }
   },
   {
@@ -20,7 +21,8 @@
     "data": {
       "technology": "python",
       "modalidad": "cdmx",
-      "nivel": "junior"
+      "nivel": "junior",
+      "contractType" : "part-time"
     }
   },
   {
@@ -32,7 +34,8 @@
     "data": {
       "technology": "mobile",
       "modalidad": "guadalajara",
-      "nivel": "mid-level"
+      "nivel": "mid-level",
+      "contractType" : "part-time"
     }
   },
   {
@@ -44,7 +47,8 @@
     "data": {
       "technology": "mobile",
       "modalidad": "remoto",
-      "nivel": "mid-level"
+      "nivel": "mid-level",
+      "contractType" : "full-time"
     }
   },
   {
@@ -56,7 +60,8 @@
     "data": {
       "technology": "mobile",
       "modalidad": "barcelona",
-      "nivel": "mid-level"
+      "nivel": "mid-level",
+      "contractType" : "freelance"
     }
   },
   {
@@ -68,7 +73,8 @@
     "data": {
       "technology": "php",
       "modalidad": "barcelona",
-      "nivel": "mid-level"
+      "nivel": "mid-level",
+      "contractType" : "full-time"
     }
   },
   {
@@ -80,7 +86,8 @@
     "data": {
       "technology": "java",
       "modalidad": "remoto",
-      "nivel": "mid-level"
+      "nivel": "mid-level",
+      "contractType" : "part-time"
     }
   },
   {
@@ -92,7 +99,8 @@
     "data": {
       "technology": "react",
       "modalidad": "barcelona",
-      "nivel": "senior"
+      "nivel": "senior",
+      "contractType" : "full-time"
     }
   },
   {
@@ -104,7 +112,8 @@
     "data": {
       "technology": "react",
       "modalidad": "monterrey",
-      "nivel": "mid-level"
+      "nivel": "mid-level",
+      "contractType" : "internship"
     }
   },
   {
@@ -116,7 +125,8 @@
     "data": {
       "technology": "node",
       "modalidad": "guadalajara",
-      "nivel": "mid-level"
+      "nivel": "mid-level",
+      "contractType" : "freelance"
     }
   },
   {
@@ -128,7 +138,8 @@
     "data": {
       "technology": "python",
       "modalidad": "remoto",
-      "nivel": "senior"
+      "nivel": "senior",
+      "contractType" : "full-time"
     }
   },
   {
@@ -138,9 +149,10 @@
     "ubicacion": "Guadalajara",
     "descripcion": "Se busca ingeniero de QA con experiencia en automatización de pruebas utilizando herramientas como Selenium, Cypress o Playwright. Conocimiento deseado en CI/CD.",
     "data": {
-      "technology": "mobile",
+      "technology": "ruby",
       "modalidad": "guadalajara",
-      "nivel": "lead"
+      "nivel": "lead",
+      "contractType" : "freelance"
     }
   },
   {
@@ -152,7 +164,8 @@
     "data": {
       "technology": "php",
       "modalidad": "cdmx",
-      "nivel": "mid-level"
+      "nivel": "mid-level",
+      "contractType" : "part-time"
     }
   },
   {
@@ -162,9 +175,10 @@
     "ubicacion": "Madrid",
     "descripcion": "Estamos buscando un Scrum Master con experiencia en metodologías ágiles y gestión de equipos multidisciplinarios. Certificación Scrum Master deseable.",
     "data": {
-      "technology": "mobile",
+      "technology": "react",
       "modalidad": "madrid",
-      "nivel": "mid-level"
+      "nivel": "mid-level",
+      "contractType" : "part-time"
     }
   },
   {
@@ -174,9 +188,10 @@
     "ubicacion": "Monterrey",
     "descripcion": "Buscamos un técnico de soporte con habilidades en resolución de incidencias, redes y sistemas operativos. Se requiere atención al detalle y excelente trato con el usuario.",
     "data": {
-      "technology": "mobile",
+      "technology": "c++",
       "modalidad": "monterrey",
-      "nivel": "junior"
+      "nivel": "junior",
+      "contractType" : "internship"
     }
   }
 ]
