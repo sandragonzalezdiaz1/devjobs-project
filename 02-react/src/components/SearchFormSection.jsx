@@ -1,43 +1,58 @@
 import { useId, useState } from "react"; // Hook que genera id unicos para evitar colisiones de nombres (Ideal para formularios)
 
-export function SearchFormSection({ onSearch, onTextFilter }) {
-  const idText = useId();
-  const idTechnology = useId();
-  const idLocation = useId();
-  const idExperienceLevel = useId();
-  const idContractType = useId();
+// CUSTOM HOOK
+const useSearchForm = ({ onSearch, onTextFilter, idTechnology, idLocation, idExperienceLevel, idContractType }) => {
 
-  // Estado para saber qué campo está activo
-  const [focusedField, setFocusedField] = useState(null)
-
+  //Variables de estado
+  const [searchText, setSearchText] = useState("") // Guarda el texto introducido por el usuario
   // Cuando enviamos el formulario
   const handleSubmit = (event) => {
-    event.preventDefault() 
+    event.preventDefault()
 
-
-    // Solo obtenemos los datos del input/select que cambió
+    // Solo obtiene los datos del input/select que cambió
     //const formData = new FormData(event.target)
 
-   // Obtenemos todos los datos del formulario
+    // Obtiene todos los datos del formulario
     const formData = new FormData(event.currentTarget);
 
-    // Almacenamos los valores de los select de cada uno de los filtros en un objeto
+    // Almacena los valores de los select de cada uno de los filtros en un objeto
     const filters = {
       technology: formData.get(idTechnology),
       location: formData.get(idLocation),
       experienceLevel: formData.get(idExperienceLevel),
-      contractType: formData.get(idContractType)
-    };
+      contractType: formData.get(idContractType),
+    }
 
     //console.log(filters)
-    onSearch(filters);
-  };
+    onSearch(filters)
+  }
 
   // Búsqueda de texto en tiempo real
   const handleChangeText = (event) => {
-    const text = event.target.value; //Recuperamos el valor del input
-    onTextFilter(text);
-  };
+    const text = event.target.value; //Recupera el valor del input
+    setSearchText(text) // Actualiza en el estado el texto
+    onTextFilter(text)
+  }
+  // Devuelve lo que el componente necesita
+  return {
+    searchText,
+    handleSubmit,
+    handleChangeText
+  }
+
+}
+
+export function SearchFormSection({ onSearch, onTextFilter }) {
+  const idText = useId()
+  const idTechnology = useId()
+  const idLocation = useId()
+  const idExperienceLevel = useId()
+  const idContractType = useId()
+
+  const { handleSubmit, handleChangeText} = useSearchForm({ idTechnology, idLocation, idExperienceLevel, idContractType, onSearch, onTextFilter})
+  
+  // Estado para saber qué campo está activo
+  const [focusedField, setFocusedField] = useState(null);
 
   return (
     <section className="jobs-search">
@@ -69,14 +84,13 @@ export function SearchFormSection({ onSearch, onTextFilter }) {
             type="text"
             placeholder="Buscar trabajos, empresas o habilidades"
             onChange={handleChangeText}
-            onFocus={() => setFocusedField('search')}
+            onFocus={() => setFocusedField("search")}
             onBlur={() => setFocusedField(null)}
             style={{
-            borderColor: focusedField === 'search' ? '#4f46e5' : '#d1d5db',
-            outline: focusedField === 'search' ? '2px solid #4f46e5' : 'none',
-          }}
+              borderColor: focusedField === "search" ? "#4f46e5" : "#d1d5db",
+              outline: focusedField === "search" ? "2px solid #4f46e5" : "none",
+            }}
           />
-      
         </div>
 
         <div className="search-filters">

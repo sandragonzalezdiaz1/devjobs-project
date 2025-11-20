@@ -1,4 +1,24 @@
+import { useRouter } from "../hooks/useRouter"
+
 export function HomePage() {
+     // Obtenemos navigateTo del custom hook
+    const { navigateTo } = useRouter()
+
+  const handleSearch = (event) => {
+    event.preventDefault()  // Previene el comportamiento por defecto (reload de página)
+    
+    // Crea un objeto FormData que contiene todos los campos del formulario y sus valores
+    const formData = new FormData(event.target)
+    // Recuperamos el valor del input por su name
+    const searchTerm = formData.get('search')
+   
+    const url = searchTerm ? `/search?text=${encodeURIComponent(searchTerm)}` : `/search`
+    // encodeURIComponent codifica el texto para que sea seguro en la URL 
+
+    navigateTo(url) // Usamos navigateTo del hook
+
+  }
+
   return (
     <main>
       <section>
@@ -11,7 +31,7 @@ export function HomePage() {
       </section>
 
       <section>
-        <form role="search">
+        <form role="search" onSubmit={handleSearch}>
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -23,14 +43,14 @@ export function HomePage() {
               strokeWidth="1"
               strokeLinecap="round"
               strokeLinejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-search"
+              className="icon icon-tabler icons-tabler-outline icon-tabler-search"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
               <path d="M21 21l-6 -6" />
             </svg>
             <input
-              type="text"
+              type="text" name="search" id="search"
               placeholder="Buscar empleos por título, habilidad o empresa"
             />
             <button type="submit">Buscar</button>

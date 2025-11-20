@@ -1,17 +1,16 @@
 import { Pagination } from "../components/Pagination.jsx";
 import { SearchFormSection } from "../components/SearchFormSection.jsx";
 import { JobListings } from "../components/JobListings.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import jobsData from "../data.json"
 
 // Constante que almacena el numero de trabajos por pagina
 const RESULTS_PER_PAGE = 4
 
-export function SearchPage() {
-  
-  //console.log("App renderizado")
+// CUSTOM HOOK
+const useFilters = () => {
 
-  // Variables de estado
+   // Variables de estado
   const [filters, setFilters] = useState({
      technology: '',
      location: '',
@@ -68,7 +67,38 @@ export function SearchPage() {
     setCurrentPage(1) //Resetea la pagina actual a la numero 1
   }
 
+  return {
+    jobsFilteredByFilters,
+    pagedResults,
+    totalPages,
+    currentPage,
+    handlePageChange,
+    handleSearch,
+    handleTextFilter
+  }
+
+}
+
+export function SearchPage() {
   
+  //console.log("App renderizado")
+
+  const {
+    jobsWithTextFilter,
+    pagedResults,
+    currentPage,
+    totalPages,
+    handlePageChange,
+    handleSearch,
+    handleTextFilter
+  } = useFilters()
+
+  // Cambia el titulo de la pagina
+  useEffect(() => {
+    document.title = `Resultados: ${jobsWithTextFilter.length}, Página ${currentPage} - DevJobs`
+  },[jobsWithTextFilter, currentPage])
+
+
   return (
     <>
       <main>

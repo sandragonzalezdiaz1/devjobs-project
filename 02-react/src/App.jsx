@@ -2,25 +2,19 @@ import { Header } from "./components/Header.jsx" //No hace falta poner la extens
 import { Footer } from "./components/Footer.jsx";
 import { HomePage } from "./pages/Home.jsx";
 import { SearchPage } from "./pages/Search.jsx";
+import { Route } from "./components/Route.jsx";
 import { NotFoundPage } from "./pages/404.jsx";
+import { Contact } from "./pages/Contact.jsx";
 
 function App() {
-  // Recuperamos la pagina actual en la que estamos
-  const currentPath = window.location.pathname
-
-  let page = <NotFoundPage/>
-
-  if(currentPath === '/'){
-    page = <HomePage/>
-  } else if (currentPath === '/search'){
-    page = <SearchPage/>
-   }
-
-
+  
   return (
     <>
       <Header />
-      { page }
+      <Route path="/" component={HomePage} />
+      <Route path="/search" component={SearchPage} />
+       <Route path="/404" component={NotFoundPage} />
+       <Route path="/contact" component={Contact} />
       <Footer />
     </>
   );
