@@ -1,0 +1,134 @@
+import { Pagination } from "../components/Pagination.jsx";
+import { SearchFormSection } from "../components/SearchFormSection.jsx";
+import { JobListings } from "../components/JobListings.jsx";
+import { useState, useEffect } from "react";
+
+// Constante que almacena el numero de trabajos por pagina
+const RESULTS_PER_PAGE = 4
+
+// CUSTOM HOOK
+const useFilters = () => {
+
+  // Variables de estado
+  const [filters, setFilters] = useState({
+     technology: '',
+     location: '',
+     experienceLevel: '',
+  })
+
+  const [textToFilter, setTextToFilter] = useState('')
+
+
+  const [currentPage, setCurrentPage] = useState(1) // Inicia siempre la pagina actual en la numero 1
+  //const [textToFilter, setTextToFilter] = useState('')
+
+  const [jobs, setJobs] = useState([]) // Estado para los empleos (inicialmente vacío) 
+  const [total, setTotal] = useState(0)  // Estado para el total de resultados
+  const [loading, setLoading] = useState(true) // Estado para indicar que estamos cargando
+
+  //Llamada a la API externa dentro del useEffect
+  useEffect(() => {
+    // Función asíncrona dentro del efecto
+    async function fetchJobs(){ 
+      try {
+        setLoading(true)  // Indicamos que estamos cargando
+
+        const params = new URLSearchParams()
+        if(textToFilter) params.append('text', textToFilter)
+        if(filters.technology) params.append('technology', filters.technology)
+        if(filters.location) params.append('type', filters.location)
+        if(filters.experienceLevel) params.append('level', filters.experienceLevel)
+
+        const offset = (currentPage - 1) * RESULTS_PER_PAGE
+        params.append('limit', RESULTS_PER_PAGE)
+        params.append('offset', offset)
+
+        const queryParams = params.toString() // Convertimos los parametros en una string
+
+        // Delay artificial de 5s
+        // await new Promise((resolve) => setTimeout(resolve, 5000)) // Quitar delay antes de subir a produccion
+
+        // Hacemos la peticion fetch
+        const response = await fetch(`https://jscamp-api.vercel.app/api/jobs?${queryParams}`)
+        const json = await response.json() // Pasamos la respuesta a formato JSON
+        // Guardamos los datos
+        setJobs(json.data) // Solo el array de empleos
+        setTotal(json.total) // Nº total de resultados
+
+      } catch (error){
+        console.error("Error al cargar los empleos", error)
+      } finally {
+        // Indicamos que terminamos de cargar
+        setLoading(false) 
+      }
+    }
+
+    fetchJobs() // Llamamos a la función
+  }, [filters.technology, filters.location, filters.experienceLevel, textToFilter, currentPage]) // Se renderiza solo cuando se monta el componente
+
+  const totalPages = Math.ceil(total / RESULTS_PER_PAGE)
+
+  
+  const handlePageChange = (page) => {
+    //console.log("Estas cambiando a la página: ", page)
+    setCurrentPage(page) //Actualiza la pagina actual
+    window.scrollTo({ top: 0, behavior: 'smooth' }) // Scroll al inicio al cambiar de pagina
+  }
+
+  const handleSearch = (filters) => {
+    setCurrentPage(1)
+    setFilters(filters)
+  }
+
+  const handleTextFilter = (newTextToFilter) => {
+    setTextToFilter(newTextToFilter)
+    setCurrentPage(1) //Resetea la pagina actual a la numero 1
+  }
+
+  return {
+    loading,
+    jobs,
+    total,
+    totalPages,
+    currentPage,
+    handlePageChange,
+    handleSearch,
+    handleTextFilter
+  }
+
+}
+
+export function SearchPage() {
+  
+  //console.log("App renderizado")
+
+  const {
+    jobs,
+    total,
+    currentPage,
+    totalPages,
+    handlePageChange,
+    handleSearch,
+    handleTextFilter
+  } = useFilters()
+
+  // Cambia el titulo de la pagina
+  useEffect(() => {
+    document.title = `Resultados: ${total}, Página ${currentPage} - DevJobs`
+  },[total, currentPage])
+
+
+  return (
+    <>
+      <main>
+        <SearchFormSection onSearch={handleSearch} onTextFilter={handleTextFilter}/>
+        <section>
+          <JobListings jobs={jobs} total={total} />
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        </section>
+      </main>
+    </>
+  );
+}
+
+
