@@ -103,27 +103,34 @@ export function SearchPage() {
   //console.log("App renderizado")
 
   const {
+    loading,
     jobs,
     total,
-    currentPage,
     totalPages,
+    currentPage,
     handlePageChange,
     handleSearch,
     handleTextFilter
   } = useFilters()
 
   // Cambia el titulo de la pagina
-  useEffect(() => {
+ /*  useEffect(() => {
     document.title = `Resultados: ${total}, Página ${currentPage} - DevJobs`
-  },[total, currentPage])
+  },[total, currentPage]) */
 
+  // El titulo depende del estado de la aplicacion
+  const title =  loading ? `Cargando... - DevJobs` : `Resultados: ${total}, Página ${currentPage} - DevJobs`
 
   return (
     <>
       <main>
+        <title>{title}</title>  { /* Etiqueta de SEO */ }
         <SearchFormSection onSearch={handleSearch} onTextFilter={handleTextFilter}/>
         <section>
-          <JobListings jobs={jobs} total={total} />
+           <h2>Resultados de búsqueda</h2>
+           { 
+              loading ? <p>Cargando empleos...</p> : <JobListings jobs={jobs} />         
+           }
           <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </section>
       </main>
