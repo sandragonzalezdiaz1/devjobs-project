@@ -1,7 +1,7 @@
 import styles from "./Pagination.module.css" // importamos el CSS Module
 
 // Valores por defecto en los parametros
-export function Pagination({ currentPage = 1, totalPages = 10, onPageChange = () => {} }) {
+export function Pagination({ currentPage = 1, totalPages = 10, onPageChange }) {
 
     //console.log('render Pagination')
 
@@ -11,30 +11,30 @@ export function Pagination({ currentPage = 1, totalPages = 10, onPageChange = ()
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1); // Si en total son 10 paginas generaría [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   //Se utiliza _ como parametro para que no tenga en cuenta ese parametro, no interesa darle un valor
 
-  const isFirstPage = currentPage === 1;
-  const isLastPage = currentPage === totalPages;
+  const isFirstPage = currentPage === 1
+  const isLastPage = currentPage === totalPages
 
   const stylePrevButton = isFirstPage
     ? { pointerEvents: "none", opacity: 0.5 }
-    : {};
+    : {}
 
   const styleNextButton = isLastPage
     ? { pointerEvents: "none", opacity: 0.5 }
-    : {};
+    : {}
 
   const handlePrevClick = (event) => {
     event.preventDefault();
     if (!isFirstPage) { //Si no estamos en la primera pagina
       onPageChange(currentPage - 1); // Llama a la funcion del padre para cambiar a la pagina anterior
     }
-  };
+  }
 
   const handleNextClick = (event) => {
     event.preventDefault();
     if (!isLastPage) { //Si no estamos en la ultima pagina
       onPageChange(currentPage + 1); // Cambia a la pagina siguiente
     }
-  };
+  }
 
   const handleChangePage = (event) => {
     event.preventDefault(); //Evita el evento por defecto (la navegacion)
@@ -46,13 +46,18 @@ export function Pagination({ currentPage = 1, totalPages = 10, onPageChange = ()
       //Si la pagina es diferente a la pagina actual
       onPageChange(page); //Cambia a esa pagina
     }
-  };
+  }
+
+  const buildPageUrl = (page) => {
+      const url = new URL(window.location) // URL actual
+      url.searchParams.set('page', page)
+      return `${url.pathname}?${url.searchParams.toString()}`
+
+  }
 
   return (
-    <nav className={styles.pagination}>
-      {/* Si no es la primera pagina entonces muestra el svg flecha <  (es lo mismo que poner isFirstPage === false)*/}
-      {!isFirstPage && (
-        <a href="#" style={stylePrevButton} onClick={handlePrevClick}>
+    <nav className={styles.pagination} aria-label="Paginación">
+        <a href={buildPageUrl(currentPage - 1)} style={stylePrevButton} onClick={handlePrevClick} aria-disabled={currentPage === 1}>
           <svg
             width="16"
             height="16"
@@ -67,14 +72,14 @@ export function Pagination({ currentPage = 1, totalPages = 10, onPageChange = ()
             <path d="M15 6l-6 6l6 6" />
           </svg>
         </a>
-      )}
 
       {/* Recorre el array y crea un <a> por cada pagina */}
       {pages.map((page) => (
         <a 
         key={page}
          data-page={page}
-         href="#" 
+         href={buildPageUrl(page)}
+         aria-current={page === currentPage ? 'page': undefined}
          className={currentPage === page ? styles.isActive : ""}
          onClick={handleChangePage} 
         >
@@ -82,9 +87,7 @@ export function Pagination({ currentPage = 1, totalPages = 10, onPageChange = ()
         </a>
       ))}
 
-      {/* Si no es la ultima pagina muestra el svg */}
-      {!isLastPage && (
-        <a href="#" style={styleNextButton} onClick={handleNextClick}>
+        <a href={buildPageUrl(currentPage + 1)} style={styleNextButton} onClick={handleNextClick} aria-disabled={currentPage === totalPages}>
           <svg
             width="16"
             height="16"
@@ -100,7 +103,6 @@ export function Pagination({ currentPage = 1, totalPages = 10, onPageChange = ()
             <path d="M9 6l6 6l-6 6" />
           </svg>
         </a>
-      )}
     </nav>
   );
 }

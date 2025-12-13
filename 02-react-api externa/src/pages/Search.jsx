@@ -2,6 +2,7 @@ import { Pagination } from "../components/Pagination.jsx";
 import { SearchFormSection } from "../components/SearchFormSection.jsx";
 import { JobListings } from "../components/JobListings.jsx";
 import { useState, useEffect } from "react";
+import { useRouter } from "../hooks/useRouter.jsx";
 
 // Constante que almacena el numero de trabajos por pagina
 const RESULTS_PER_PAGE = 4
@@ -10,21 +11,34 @@ const RESULTS_PER_PAGE = 4
 const useFilters = () => {
 
   // Variables de estado
-  const [filters, setFilters] = useState({
-     technology: '',
-     location: '',
-     experienceLevel: '',
+  const [filters, setFilters] = useState(() => { // Para que los filtros se conserven al recargar la pagina
+    const params = new URLSearchParams(window.location.search)
+    return {
+      technology: params.get('technology') || '',
+      location: params.get('type') || '',
+      experienceLevel: params.get('level') || '',
+    }
+    
   })
 
-  const [textToFilter, setTextToFilter] = useState('')
+  // Para que el filtro se conserve al recargar la pagina
+  const [textToFilter, setTextToFilter] = useState(() => { // Lazy initialization
+    const params = new URLSearchParams(window.location.search) // Obtiene la parte de la URL que contiene los query parameters
+    return params.get('text') || ''
 
+  })
 
-  const [currentPage, setCurrentPage] = useState(1) // Inicia siempre la pagina actual en la numero 1
-  //const [textToFilter, setTextToFilter] = useState('')
-
+  const [currentPage, setCurrentPage] = useState(()=> {
+    const params = new URLSearchParams(window.location.search)
+    const page = Number(params.get('page'))  // La URL tiene formato texto, convertimos a número
+    return Number.isNaN(page) ? 1 : page // Si es un NaN establecemos la pagina 1, sino la pagina correspondiente
+  }) 
+  
   const [jobs, setJobs] = useState([]) // Estado para los empleos (inicialmente vacío) 
   const [total, setTotal] = useState(0)  // Estado para el total de resultados
   const [loading, setLoading] = useState(true) // Estado para indicar que estamos cargando
+
+  const { navigateTo } = useRouter()
 
   //Llamada a la API externa dentro del useEffect
   useEffect(() => {
@@ -64,11 +78,31 @@ const useFilters = () => {
     }
 
     fetchJobs() // Llamamos a la función
-  }, [filters.technology, filters.location, filters.experienceLevel, textToFilter, currentPage]) // Se renderiza solo cuando se monta el componente
+  }, [filters,currentPage, textToFilter]) // Se renderiza solo cuando se monta el componente
+
+
+  // Construye dinámicamente los query parameters según los filtros activos y navega a la nueva URL cada vez que cambian
+  useEffect(() =>{
+    const params = new URLSearchParams() // Crea un objeto vacío para construir la query string desde cero
+
+    if(textToFilter) params.append('text', textToFilter)
+    if(filters.technology) params.append('technology', filters.technology)
+    if(filters.location) params.append('type', filters.location)
+    if(filters.experienceLevel) params.append('level', filters.experienceLevel)
+
+    // La página 1 se considera el valor por defecto
+    if(currentPage > 1) params.append('page', currentPage)
+    
+    // Usamos window.location.pathname en lugar de escribir a mano '/search'
+    const newUrl = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname
+
+    navigateTo(newUrl) // Navegación programática
+
+    }, [filters, textToFilter, currentPage, navigateTo])
+
 
   const totalPages = Math.ceil(total / RESULTS_PER_PAGE)
 
-  
   const handlePageChange = (page) => {
     //console.log("Estas cambiando a la página: ", page)
     setCurrentPage(page) //Actualiza la pagina actual
@@ -91,23 +125,23 @@ const useFilters = () => {
     total,
     totalPages,
     currentPage,
+    textToFilter,
     handlePageChange,
     handleSearch,
-    handleTextFilter
+    handleTextFilter,
   }
 
 }
 
 export function SearchPage() {
-  
   //console.log("App renderizado")
-
   const {
     loading,
     jobs,
     total,
     totalPages,
     currentPage,
+    textToFilter,
     handlePageChange,
     handleSearch,
     handleTextFilter
@@ -124,8 +158,12 @@ export function SearchPage() {
   return (
     <>
       <main>
-        <title>{title}</title>  { /* Etiqueta de SEO */ }
-        <SearchFormSection onSearch={handleSearch} onTextFilter={handleTextFilter}/>
+        <title>{title}</title> 
+        <SearchFormSection 
+          initialText={textToFilter}
+          onSearch={handleSearch} 
+          onTextFilter={handleTextFilter}
+        />
         <section>
            <h2>Resultados de búsqueda</h2>
            { 

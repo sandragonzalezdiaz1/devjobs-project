@@ -1,16 +1,19 @@
-import { useId, useState } from "react"; // Hook que genera id unicos para evitar colisiones de nombres (Ideal para formularios)
+import { useId, useState, useRef } from "react"; // Hook que genera id unicos para evitar colisiones de nombres (Ideal para formularios)
 
 // La variable persiste entre renders porque esta fuera de la funcion (React no la reinicia)
-let timeoutId = null
+//let timeoutId = null
 
 // CUSTOM HOOK
 const useSearchForm = ({ onSearch, onTextFilter, idTechnology, idLocation, idExperienceLevel, idText}) => {
 
+  // Hook useRef para almacenar la referencia del timeout
+  const timeoutId = useRef(null)
   //Variables de estado
   const [searchText, setSearchText] = useState("") // Guarda el texto introducido por el usuario
+  
   // Cuando enviamos el formulario
   const handleSubmit = (event) => {
-    event.preventDefault()
+    event.preventDefault() // Cancelamos el evento por defecto (submit del formulario)
 
     // Solo obtiene los datos del input/select que cambió
     //const formData = new FormData(event.target)
@@ -34,22 +37,24 @@ const useSearchForm = ({ onSearch, onTextFilter, idTechnology, idLocation, idExp
     onSearch(filters)
   }
 
+
   // Búsqueda de texto en tiempo real
   const handleChangeText = (event) => {
     const text = event.target.value; //Recupera el valor del input
     setSearchText(text) // Actualizamos el input inmediatamente
 
-    // DEBOUNCE : Cancelar el timeout anterior (si existe)
-      if(timeoutId){
-        clearTimeout(timeoutId) 
+    // DEBOUNCE: Cancelar el timeout anterior (si existe)
+      if(timeoutId.current){
+        clearTimeout(timeoutId.current) // current para acceder a el valor 
       }
       
       // Crear un nuevo timeout 
-      timeoutId = setTimeout(() => {
-      onTextFilter(text) // Ejecutamos la busqueda despues de 500 ms
+      timeoutId.current = setTimeout(() => {
+      onTextFilter(text) // Ejecutamos la busqueda despues de 500 msW
     }, 500) // Podemos poner valores entre 300-500 milisegundos
  
   }
+
   // Devuelve lo que el componente necesita
   return {
     searchText,
@@ -59,15 +64,28 @@ const useSearchForm = ({ onSearch, onTextFilter, idTechnology, idLocation, idExp
 
 }
 
-export function SearchFormSection({ onSearch, onTextFilter }) {
+// Componente 
+export function SearchFormSection({ onSearch, onTextFilter, initialText }) {
   const idText = useId()
   const idTechnology = useId()
   const idLocation = useId()
-  const idExperienceLevel = useId()
+  const idExperienceLevel = useId() 
+
+  const inputRef = useRef() // Guardamos el elemento <input> en una referencia, en lugar de usar document.getElementById() o document.querySelector()
  
   const { 
     handleSubmit,
-    handleChangeText } = useSearchForm({ idTechnology, idLocation, idExperienceLevel, onSearch, onTextFilter, idText })
+    handleChangeText,
+  } = useSearchForm({ idTechnology, idLocation, idExperienceLevel, onSearch, onTextFilter, idText })
+
+    
+    const handleClearInput = (event) => {
+    event.preventDefault()
+    //console.log(inputRef.current.value)
+    inputRef.current.value = "" // Limpiamos el valor del input
+    onTextFilter("") // Actualizamos el estado
+
+  }
   
   // Estado para saber qué campo está activo
   const [focusedField, setFocusedField] = useState(null);
@@ -97,6 +115,7 @@ export function SearchFormSection({ onSearch, onTextFilter }) {
           </svg>
 
           <input
+            ref={inputRef}
             name={idText}
             id="empleos-search-input"
             type="text"
@@ -104,11 +123,14 @@ export function SearchFormSection({ onSearch, onTextFilter }) {
             onChange={handleChangeText}
             onFocus={() => setFocusedField("search")}
             onBlur={() => setFocusedField(null)}
+            defaultValue={initialText}
             style={{
               borderColor: focusedField === "search" ? "#4f46e5" : "#d1d5db",
               outline: focusedField === "search" ? "2px solid #4f46e5" : "none",
             }}
           />
+
+           <button onClick={handleClearInput}>Limpiar</button>
         </div>
 
         <div className="search-filters">
