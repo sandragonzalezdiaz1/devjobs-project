@@ -2,35 +2,29 @@ import { Pagination } from "../components/Pagination.jsx";
 import { SearchFormSection } from "../components/SearchFormSection.jsx";
 import { JobListings } from "../components/JobListings.jsx";
 import { useState, useEffect } from "react";
-import { useRouter } from "../hooks/useRouter.jsx";
+import { useSearchParams } from "react-router";
 
 // Constante que almacena el numero de trabajos por pagina
 const RESULTS_PER_PAGE = 4
 
 // CUSTOM HOOK
 const useFilters = () => {
-
   // Variables de estado
+  const [searchParams, setSearchParams] = useSearchParams()
+
   const [filters, setFilters] = useState(() => { // Para que los filtros se conserven al recargar la pagina
-    const params = new URLSearchParams(window.location.search)
     return {
-      technology: params.get('technology') || '',
-      location: params.get('type') || '',
-      experienceLevel: params.get('level') || '',
+      technology: searchParams.get('technology') || '',
+      location: searchParams.get('type') || '',
+      experienceLevel: searchParams.get('level') || '',
     }
-    
   })
 
-  // Para que el filtro se conserve al recargar la pagina
-  const [textToFilter, setTextToFilter] = useState(() => { // Lazy initialization
-    const params = new URLSearchParams(window.location.search) // Obtiene la parte de la URL que contiene los query parameters
-    return params.get('text') || ''
-
-  })
+  // Para que el filtro del input de busqueda se conserve al recargar la pagina
+  const [textToFilter, setTextToFilter] = useState(() => searchParams.get('text') || '')
 
   const [currentPage, setCurrentPage] = useState(()=> {
-    const params = new URLSearchParams(window.location.search)
-    const page = Number(params.get('page'))  // La URL tiene formato texto, convertimos a número
+    const page = Number(searchParams.get('page'))  // La URL tiene formato texto, convertimos a número
     return Number.isNaN(page) ? page : 1 
   }) 
   
@@ -39,8 +33,7 @@ const useFilters = () => {
   const [total, setTotal] = useState(0)  // Estado para el total de resultados
   const [loading, setLoading] = useState(true) // Estado para indicar que estamos cargando
 
-  const { navigateTo } = useRouter()
-
+ 
   //Llamada a la API externa dentro del useEffect
   useEffect(() => {
     // Función asíncrona dentro del efecto
@@ -49,16 +42,17 @@ const useFilters = () => {
         setLoading(true)  // Indicamos que estamos cargando
 
         const params = new URLSearchParams()
+
         if(textToFilter) params.append('text', textToFilter)
         if(filters.technology) params.append('technology', filters.technology)
         if(filters.location) params.append('type', filters.location)
         if(filters.experienceLevel) params.append('level', filters.experienceLevel)
 
         const offset = (currentPage - 1) * RESULTS_PER_PAGE
-        params.append('limit', RESULTS_PER_PAGE)
-        params.append('offset', offset)
+        searchParams.append('limit', RESULTS_PER_PAGE)
+        searchParams.append('offset', offset)
 
-        const queryParams = params.toString() // Convertimos los parametros en una string
+        const queryParams = searchParams.toString() // Convertimos los parametros en una string
 
         // Delay artificial de 5s
         // await new Promise((resolve) => setTimeout(resolve, 5000)) // Quitar delay antes de subir a produccion
@@ -79,27 +73,28 @@ const useFilters = () => {
     }
 
     fetchJobs() // Llamamos a la función
+
   }, [filters, textToFilter, currentPage]) // Se renderiza solo cuando se monta el componente
 
 
-  // Construye dinámicamente los query parameters según los filtros activos y navega a la nueva URL cada vez que cambian
-  useEffect(() =>{
-    const params = new URLSearchParams() // Crea un objeto vacío para construir la query string desde cero
+  useEffect(() => {
+      setSearchParams(() => {
+      // Limpia todos los parametros existentes en la url
+      const params = new URLSearchParams()
 
-    if(textToFilter) params.append('text', textToFilter)
-    if(filters.technology) params.append('technology', filters.technology)
-    if(filters.location) params.append('type', filters.location)
-    if(filters.experienceLevel) params.append('level', filters.experienceLevel)
+      // Añade solo los parametros necesarios (usamos set() en vez de append())
+      if(textToFilter) params.set('text', textToFilter)
+      if(filters.technology) params.set('technology', filters.technology)
+      if(filters.location) params.set('type', filters.location)
+      if(filters.experienceLevel) params.set('level', filters.experienceLevel)
 
-    // La página 1 se considera el valor por defecto
-    if(currentPage > 1) params.append('page', currentPage)
+      // La página 1 se considera el valor por defecto
+      if(currentPage > 1) searchParams.set('page', currentPage)
     
-    // Usamos window.location.pathname en lugar de escribir a mano '/search'
-    const newUrl = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname
+      return params
+      })
 
-    navigateTo(newUrl) // Navegación programática
-
-    }, [filters, textToFilter, currentPage, navigateTo])
+    }, [filters, textToFilter, currentPage, setSearchParams])
 
 
   const totalPages = Math.ceil(total / RESULTS_PER_PAGE)

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "./Link";
+import styles from "./JobCard.module.css";
 
 export function JobCard({ job }) {
   //Variable de estado
@@ -21,11 +23,20 @@ export function JobCard({ job }) {
       data-technology={job.data.technology}
     >
       <div>
-        <h3>{job.titulo}</h3>
+        <h3>
+          <Link href={`/jobs/${job.id}`} className={styles.title} aria-label={`Ver detalles de ${job.titulo} en ${job.empresa}`}>
+            {job.titulo}
+          </Link>
+        </h3>
         <small>
           {job.empresa} | {job.ubicacion}
         </small>
         <p>{job.descripcion}</p>
+      </div>
+      <div className={styles.actions}>
+        <Link href={`/jobs/${job.id}`} className={styles.details}>
+          Ver detalles
+        </Link>
       </div>
       <button className={buttonClasses} onClick={handleApplyClick} disabled={isApplied}>
         {buttonText}

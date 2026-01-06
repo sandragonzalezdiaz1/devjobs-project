@@ -34,7 +34,9 @@ export function JobDetail() {
   useEffect(() => {
     fetch(`https://jscamp-api.vercel.app/api/jobs/${jobId}`)
       .then((response) => {
-        if (!response.ok) throw new Error("Job Not Found")
+        if (!response.ok){
+          navigate('/not-found')
+        }
         return response.json()
       })
       .then((json) => {
