@@ -1,25 +1,32 @@
 import { Header } from "./components/Header.jsx" 
 import { Footer } from "./components/Footer.jsx";
-import { HomePage } from "./pages/Home.jsx";
-import { SearchPage } from "./pages/Search.jsx";
-import { NotFoundPage } from "./pages/404.jsx";
-import { Contact } from "./pages/Contact.jsx";
-import { JobDetail } from "./pages/Detail.jsx";
 
 import { Routes, Route } from 'react-router'
+import { lazy, Suspense } from 'react';
+
+// Técnica Lazy load
+// Definimos las páginas como componentes lazy
+const HomePage = lazy(()=> import('./pages/Home.jsx')) 
+const SearchPage = lazy(() => import('./pages/Search.jsx'))
+const NotFoundPage = lazy(()=> import('./pages/404.jsx'))
+const JobDetail = lazy(() => import('./pages/Detail.jsx'))
+const ContactPage = lazy(() => import('./pages/Contact.jsx'))
+// React.lazy espera que el import() devuelva un módulo donde el componente principal está exportado como default
 
 function App() {
   
   return (
     <>
       <Header />
+      <Suspense fallback={<div style={{maxWidth:'1280px', margin:'0 auto', padding:'0 1rem' }}>Cargando...</div>}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/jobs/:jobId" element={<JobDetail />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      </Suspense>
       <Footer />
     </>
   );

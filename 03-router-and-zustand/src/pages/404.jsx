@@ -1,5 +1,5 @@
 
-export function NotFoundPage () {
+export default function NotFoundPage () {
   return (
     <main className="not-found">
       <h1>404 - Página no encontrada</h1>

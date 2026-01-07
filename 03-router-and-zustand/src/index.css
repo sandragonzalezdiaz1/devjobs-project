@@ -480,7 +480,8 @@ article {
 }
 
 .nav-link-active {
-  color: yellow;
-  pointer-events: none;
+  color: #1173d4;
+  pointer-events: none; /* Desactiva el clic */
+  user-select: none; /* Evita seleccionar el texto */
 }
 

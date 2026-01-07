@@ -20,8 +20,9 @@ const useFilters = () => {
     }
   })
 
-  // Para que el filtro del input de busqueda se conserve al recargar la pagina
-  const [textToFilter, setTextToFilter] = useState(() => searchParams.get('text') || '')
+  // Lazy initialization
+  // React llama a esta función solo una vez, cuando se crea el estado inicial
+  const [textToFilter, setTextToFilter] = useState(() => searchParams.get('text') || '') 
 
   const [currentPage, setCurrentPage] = useState(()=> {
     const page = Number(searchParams.get('page'))  // La URL tiene formato texto, convertimos a número
@@ -129,7 +130,7 @@ const useFilters = () => {
 
 }
 
-export function SearchPage() {
+export default function SearchPage() {
   //console.log("App renderizado")
 
   const {

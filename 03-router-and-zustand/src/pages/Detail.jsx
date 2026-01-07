@@ -21,7 +21,7 @@ function JobSection({ title, content }) {
   );
 }
 
-export function JobDetail() {
+export default function JobDetail() {
   const { jobId } = useParams() // El nombre del parametro tiene que coincidir con el que hemos puesto en el path de la ruta "/.../:id"
   // useParams() siempre devuelve strings
 

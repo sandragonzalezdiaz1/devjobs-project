@@ -1,6 +1,6 @@
 import { useRouter } from "../hooks/useRouter"
 
-export function HomePage() {
+export default function HomePage() {
      // Obtenemos navigateTo del custom hook
     const { navigateTo } = useRouter()
 

@@ -1,5 +1,5 @@
 
-export function Contact(){
+export default function ContactPage(){
     return (
         <div className="contact-page">
         <h1>📩 Contacto</h1>
