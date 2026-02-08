@@ -1,10 +1,9 @@
 import { Header } from "./components/Header.jsx" 
 import { Footer } from "./components/Footer.jsx";
-
 import { Routes, Route } from 'react-router'
 import { lazy, Suspense } from 'react';
 
-// Técnica Lazy load
+// Técnica Lazy load: solo descarga lo que necesita, mejora el rendimiento de la app
 // Definimos las páginas como componentes lazy
 const HomePage = lazy(()=> import('./pages/Home.jsx')) 
 const SearchPage = lazy(() => import('./pages/Search.jsx'))
@@ -14,7 +13,6 @@ const ContactPage = lazy(() => import('./pages/Contact.jsx'))
 // React.lazy espera que el import() devuelva un módulo donde el componente principal está exportado como default
 
 function App() {
-  
   return (
     <>
       <Header />

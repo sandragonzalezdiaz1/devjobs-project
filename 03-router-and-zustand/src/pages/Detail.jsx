@@ -3,7 +3,8 @@ import { useNavigate, useParams } from "react-router";
 import styles from "./Detail.module.css";
 import { Link } from "../components/Link";
 import snarkdown from "snarkdown";
-
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 // Componente reutilizable (las secciones tienen el mismo layout) 
 function JobSection({ title, content }) {
@@ -19,6 +20,50 @@ function JobSection({ title, content }) {
       </div>
     </section>
   );
+}
+
+/* Breadcrumb: elemento de navegación en una página web que muestra la ruta jerárquica desde 
+la página de inicio hasta la página actual, como Inicio > Categoría > Subcategoría > Página
+ */ 
+function DetailPageBreadCrumb({ job }){
+  return (
+    <div className={styles.container}>
+        <nav className={styles.breadcrumb}>
+          <Link href="/search" className={styles.breadcrumbButton}>
+            Empleos
+          </Link>
+          <span className={styles.breadcrumbSeparator}>/</span>
+          <span className={styles.breadcrumbCurrent}>{job.titulo}</span>
+        </nav>
+      </div>
+  )
+}
+
+
+/* Header */
+function DetailPageHeader({ job }){
+  return (
+    <>
+      <header className={styles.header}>
+        <div className={styles.head}>
+          <h1 className={styles.title}>{job.titulo}</h1>
+          <p className={styles.meta}>
+              {job.empresa} · {job.ubicacion}
+          </p>
+        </div>
+         <DetailApplyButton />
+      </header>
+    </>
+  )
+}
+
+function DetailApplyButton(){
+  const {isLoggedIn} = useContext(AuthContext)
+  return (
+     <button disabled={!isLoggedIn} className={styles.applyButton}>
+          { isLoggedIn ? "Aplicar ahora" : "Inicia sesión para aplicar" }
+     </button>
+  )
 }
 
 export default function JobDetail() {
@@ -48,7 +93,7 @@ export default function JobDetail() {
       .finally(() => {
         setLoading(false)
       })
-  }, [jobId])
+  }, [jobId, navigate])
 
   if (loading) {
     return (
@@ -78,36 +123,16 @@ export default function JobDetail() {
 
   return (
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
-      <div className={styles.container}>
-
-        {/* Breadcrumb */}
-        <nav className={styles.breadcrumb}>
-          <Link href="/search" className={styles.breadcrumbButton}>
-            Empleos
-          </Link>
-          <span className={styles.breadcrumbSeparator}>/</span>
-          <span className={styles.breadcrumbCurrent}>{job.titulo}</span>
-        </nav>
-      </div>
-
-      {/* Header principal */}
-      <header className={styles.header}>
-        <div className={styles.headerInfo}>
-           <h1 className={styles.title}>{job.titulo}</h1>
-           <p className={styles.meta}>
-              {job.empresa} · {job.ubicacion}
-           </p>
-        </div>
-       
-        <button className={styles.applyButton}>Aplicar ahora</button>
-      </header>
-
+      {/* Breadcrumb */}
+      <DetailPageBreadCrumb job={job}/>
+      {/* Header */}
+      <DetailPageHeader job={job} />
       {/* Secciones de contenido */}
       <JobSection title="Descripción del puesto" content={job.content.description} />
       <JobSection title="Responsabilidades" content={job.content.responsibilities} />
       <JobSection title="Requisitos" content={job.content.requirements} />
       <JobSection title="Acerca de la empresa" content={job.content.about} />
-
+      <DetailApplyButton />
     </div>
   )
 }

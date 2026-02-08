@@ -1,10 +1,12 @@
 import { Link } from "./Link";
 import { NavLink } from "react-router";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export function Header() {
   return (
     <header>
-      <Link href="/" style={{textDecoration: 'none'}}>
+      <Link href="/" style={{textDecoration:'none'}}>
         <h1 style={{color: 'white'}}>
           <svg
             fill="none"
@@ -26,6 +28,16 @@ export function Header() {
         <NavLink className={({ isActive}) => isActive ? 'nav-link-active' : ''} to="/search">Empleos</NavLink>
         <NavLink className={({ isActive}) => isActive ? 'nav-link-active' : ''} to="/contact">Contacto</NavLink>
       </nav>
+
+    <HeaderUserButton />
     </header>
   )
+}
+
+const HeaderUserButton = () =>{
+  const {isLoggedIn, login, logout} = useContext(AuthContext)
+  return isLoggedIn ?
+    <button onClick={logout}>Cerrar sesión</button>
+    :
+    <button onClick={login}>Iniciar sesión</button> 
 }
