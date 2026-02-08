@@ -1,7 +1,8 @@
 import { Link } from "./Link";
 import { NavLink } from "react-router";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+//import { useContext } from "react";
+//import { AuthContext } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext"; // Usamos el Custom Hook
 
 export function Header() {
   return (
@@ -35,9 +36,12 @@ export function Header() {
 }
 
 const HeaderUserButton = () =>{
-  const {isLoggedIn, login, logout} = useContext(AuthContext)
-  return isLoggedIn ?
+  //const { isLoggedIn, login, logout } = useContext(AuthContext)
+  const { isLoggedIn, login, logout } = useAuth()
+
+  return isLoggedIn ? (
     <button onClick={logout}>Cerrar sesión</button>
-    :
+  ) : (
     <button onClick={login}>Iniciar sesión</button> 
+  )
 }
