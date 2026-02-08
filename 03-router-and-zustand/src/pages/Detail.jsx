@@ -79,6 +79,7 @@ export default function JobDetail() {
   return (
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
       <div className={styles.container}>
+
         {/* Breadcrumb */}
         <nav className={styles.breadcrumb}>
           <Link href="/search" className={styles.breadcrumbButton}>
@@ -91,10 +92,13 @@ export default function JobDetail() {
 
       {/* Header principal */}
       <header className={styles.header}>
-        <h1 className={styles.title}>{job.titulo}</h1>
-        <p className={styles.meta}>
-          {job.empresa} · {job.ubicacion}
-        </p>
+        <div className={styles.headerInfo}>
+           <h1 className={styles.title}>{job.titulo}</h1>
+           <p className={styles.meta}>
+              {job.empresa} · {job.ubicacion}
+           </p>
+        </div>
+       
         <button className={styles.applyButton}>Aplicar ahora</button>
       </header>
 

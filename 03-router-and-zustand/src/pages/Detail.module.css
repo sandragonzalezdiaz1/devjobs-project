@@ -2,7 +2,9 @@
 .container {
   padding-block: 2rem;
   max-width: 64rem;
-  margin: 0 auto;
+  /*margin: 0 auto; */
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .loading,
@@ -35,9 +37,13 @@
 }
 
 .breadcrumb {
+  display: flex;
+  align-items: center;
+  text-align: left;
   font-size: 0.875rem;
   color: var(--text-muted);
   margin-bottom: 2rem;
+
 }
 
 .breadcrumbButton {
@@ -63,18 +69,34 @@
 }
 
 .header {
-  margin-bottom: 2rem;
+  padding: 0rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  text-align: left;
 }
 
+/* Agrupa titulo + parrafo */
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+
 .title {
+  display: block; /* Anula los estilos del h1 global */
   font-size: 2.25rem;
   font-weight: bold;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  line-height: 1.2;
+  
 }
 
 .meta {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  opacity: .75;
   color: var(--text-secondary);
   
 }
@@ -90,6 +112,7 @@
   margin-bottom: 3rem;
   transition: background 0.2s;
   cursor: pointer;
+
 }
 
 .applyButton:hover {
@@ -119,8 +142,9 @@
 .sectionTitle {
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--text-primary);
+  color: var(--text-primary); 
   margin-bottom: 1rem;
+  text-align: left;
 }
 
 .sectionContent {

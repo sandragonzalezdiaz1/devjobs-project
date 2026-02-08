@@ -422,7 +422,7 @@ article {
       margin-top: 0.5rem
     }
 
-    &:last-child {
+    &:last-child { /* El ultimo hijo no tiene borde */
       border-bottom: none;
     }
   }
@@ -437,6 +437,8 @@ article {
     pointer-events: none; /* No responde a ningun evento de raton o puntero */
   }
 }
+
+
 /* Estilos de prosa para el contenido de Detalle de la oferta */
 .prose {
   line-height: 1.75;
