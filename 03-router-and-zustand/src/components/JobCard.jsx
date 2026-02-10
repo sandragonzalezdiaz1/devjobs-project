@@ -1,20 +1,46 @@
-import { useState } from "react";
-import { Link } from "./Link";
-import styles from "./JobCard.module.css";
+import { useState } from "react"
+import { Link } from "./Link"
+import styles from "./JobCard.module.css"
+import { useFavoritesStore } from "../store/favoritesStore"
+import { useAuthStore } from "../store/authStore"
 
-export function JobCard({ job }) {
-  //Variable de estado
-  const [isApplied, setIsApplied] = useState(false);
+
+// Componente para el botón de favorito dentro de la tarjeta de trabajo
+function JobCardFavoriteButton({ jobId }){
+  //Realmente estamos extrayendo toda la store
+  const { toggleFavorite, isFavorite } = useFavoritesStore()
+  const { isLoggedIn } = useAuthStore()
+
+  return (
+    <button disabled={!isLoggedIn} onClick={() => toggleFavorite(jobId)}>
+        {isFavorite(jobId) ? "♥️" : "🤍"}
+      </button>
+  )
+}
+
+function JobCardApplyButton({ jobId }){
+
+  const [isApplied, setIsApplied] = useState(false)
+  const { isLoggedIn } = useAuthStore()
+
 
   const handleApplyClick = () => {
-    setIsApplied(!isApplied);
-  };
+    console.log('Aplicando el trabajo de id:', jobId)
+    setIsApplied(!isApplied)
+  }
 
-  const buttonClasses = isApplied
-    ? "button-apply-job is-applied"
-    : "button-apply-job";
-  const buttonText = isApplied ? "Aplicado" : "Aplicar";
+  const buttonClasses = isApplied ? "button-apply-job is-applied" : "button-apply-job"
 
+  const buttonText = isApplied ? "Aplicado" : "Aplicar"
+
+  return (
+     <button className={buttonClasses} onClick={handleApplyClick} disabled={!isLoggedIn}>
+        {buttonText}
+      </button>
+  )
+}
+
+export function JobCard({ job }) {
   return (
     <article
       className="job-listing-card"
@@ -38,9 +64,8 @@ export function JobCard({ job }) {
           Ver detalles
         </Link>
       </div>
-      <button className={buttonClasses} onClick={handleApplyClick} disabled={isApplied}>
-        {buttonText}
-      </button>
+      <JobCardApplyButton jobId={job.id} />
+      <JobCardFavoriteButton jobId={job.id} />
     </article>
-  );
+  )
 }

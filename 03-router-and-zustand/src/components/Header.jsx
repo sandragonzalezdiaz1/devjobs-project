@@ -2,9 +2,16 @@ import { Link } from "./Link";
 import { NavLink } from "react-router";
 //import { useContext } from "react";
 //import { AuthContext } from "../context/AuthContext";
-import { useAuth } from "../context/AuthContext"; // Usamos el Custom Hook
+//import { useAuth } from "../context/AuthContext"; // Usamos el Custom Hook
+import { useAuthStore } from "../store/authStore";
+import { useFavoritesStore } from "../store/favoritesStore";
 
 export function Header() {
+  const { isLoggedIn } = useAuthStore()
+  const { countFavorites } = useFavoritesStore()
+
+  const numberOffFavorites = countFavorites()
+
   return (
     <header>
       <Link href="/" style={{textDecoration:'none'}}>
@@ -28,6 +35,14 @@ export function Header() {
       <nav>
         <NavLink className={({ isActive}) => isActive ? 'nav-link-active' : ''} to="/search">Empleos</NavLink>
         <NavLink className={({ isActive}) => isActive ? 'nav-link-active' : ''} to="/contact">Contacto</NavLink>
+        { 
+          isLoggedIn && (
+             <NavLink className={({ isActive }) => isActive ? 'nav-link-active' : '' } to="/profile">
+                Profile ♥️{numberOffFavorites}
+             </NavLink> 
+          )
+        }
+      
       </nav>
 
     <HeaderUserButton />
@@ -37,7 +52,8 @@ export function Header() {
 
 const HeaderUserButton = () =>{
   //const { isLoggedIn, login, logout } = useContext(AuthContext)
-  const { isLoggedIn, login, logout } = useAuth()
+  //const { isLoggedIn, login, logout } = useAuth()
+  const { isLoggedIn, login, logout } = useAuthStore()
 
   return isLoggedIn ? (
     <button onClick={logout}>Cerrar sesión</button>

@@ -3,9 +3,11 @@ import { useNavigate, useParams } from "react-router";
 import styles from "./Detail.module.css";
 import { Link } from "../components/Link";
 import snarkdown from "snarkdown";
-//import { useContext } from "react";
+//import { useContext } from "react"; // Context API
 //import { AuthContext } from "../context/AuthContext";
-import { useAuth } from "../context/AuthContext";
+//import { useAuth } from "../context/AuthContext"; // Custom hook para usar Context API
+import { useAuthStore } from "../store/authStore";
+import { useFavoritesStore } from "../store/favoritesStore";
 
 // Componente reutilizable (las secciones tienen el mismo layout) 
 function JobSection({ title, content }) {
@@ -52,19 +54,33 @@ function DetailPageHeader({ job }){
               {job.empresa} · {job.ubicacion}
           </p>
         </div>
-         <DetailApplyButton />
+        <div>
+          <DetailApplyButton />
+          <DetailFavoriteButton jobId={job.id}/>
+        </div>
+         
       </header>
     </>
   )
 }
 
 function DetailApplyButton(){
-  const {isLoggedIn} = useAuth()
+  const {isLoggedIn} = useAuthStore()
   return (
      <button disabled={!isLoggedIn} className={styles.applyButton}>
           { isLoggedIn ? "Aplicar ahora" : "Inicia sesión para aplicar" }
      </button>
   )
+}
+
+function DetailFavoriteButton({ jobId }){
+  const { isFavorite, toggleFavorite } = useFavoritesStore()
+  return (
+   <button className={styles.favoriteButton} onClick={() => toggleFavorite(jobId)}>
+        {isFavorite(jobId) ? "♥️" : "🤍"}
+    </button>
+  )
+
 }
 
 export default function JobDetail() {

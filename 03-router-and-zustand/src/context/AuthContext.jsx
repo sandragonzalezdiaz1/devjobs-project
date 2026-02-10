@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+//import { useContext } from 'react';
+import { use } from 'react';
 import { createContext, useState } from 'react';
 
 const AuthContext = createContext() // Crea el contexto que va a contener el estado global
@@ -22,15 +23,15 @@ export function AuthProvider ({ children }){
         login,
         logout
     }
-
+    //return <AuthContext.Provider value={value}... ></AuthContext> 
     return <AuthContext value={value}>{children}</AuthContext>
 
 }
 
 // Custom Hook
 export function useAuth(){
-    //Leemos el contexto y lo devolvemos
-    const context = useContext(AuthContext)
+    //const context = useContext(AuthContext)
+    const context = use(AuthContext) // forma mas moderna 
     // Comprobamos que tenemos el provider <AuthProvider> envolviendo <App/> en main.jsx
     if(context === undefined){
         throw new Error("useAuth must be used within an AuthProvider")
